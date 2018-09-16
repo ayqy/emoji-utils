@@ -1,14 +1,16 @@
-import {
+const assert = require('assert');
+const {
   isEmoji,
   containsEmoji,
   str2unicodeArray,
   length,
   substr,
   toArray
-} from './emoji-utils.js';
+} = require('./dist/umd/emoji-utils');
+
 
 // export to global
-window.emojiUtil = {
+(global || window).emojiUtil = {
   isEmoji,
   containsEmoji,
   str2unicodeArray,
@@ -271,38 +273,27 @@ let cases = [
   }
 ];
 
-// 测试工具
-function assert(predict, message) {
-  if (predict()) {
-    console.log(message);
-  }
-  else {
-    console.error(message);
-  }
-}
-
-
 // str2unicodeArray
-assert(() => cases.map(c =>
+assert(cases.map(c =>
     str2unicodeArray(c.emoji).map(unicode => String.fromCharCode(unicode.replace('\\u', '0x'))).join('') === c.unicode || console.error([c, str2unicodeArray(c.emoji).map(unicode => String.fromCharCode(unicode.replace('\\u', '0x'))).join(''), c.unicode])
   ).reduce((a, v) => a && v, true), 'str2unicodeArray()');
 // length
-assert(() => cases.map(c =>
+assert(cases.map(c =>
     length(c.emoji) === c.length || console.error([c, length(c.emoji), c.length])
   ).reduce((a, v) => a && v, true), 'length()');
 // substr
-assert(() => cases.map(c =>
+assert(cases.map(c =>
     c.sub.reduce((a, v) => a && substr.apply(null, [c.emoji].concat(v.params)) === v.str || console.log([c, substr.apply(null, [c.emoji].concat(v.params)), v.str]), true)
   ).reduce((a, v) => a && v, true), 'substr()');
 // toArray
-assert(() => cases.map(c =>
+assert(cases.map(c =>
   toArray(c.emoji).reduce((a, v, i) => a && v === c.array[i], true)  || console.error([c, toArray(c.emoji), c.array])
   ).reduce((a, v) => a && v, true), 'toArray()');
 // isEmoji
-assert(() => cases.filter(c => c.length === 1).map(c =>
+assert(cases.filter(c => c.length === 1).map(c =>
     isEmoji(c.emoji) || console.error([c, isEmoji(c.emoji), true])
   ).reduce((a, v) => a && v, true), 'isEmoji()');
 // containsEmoji
-assert(() => cases.map(c =>
+assert(cases.map(c =>
     containsEmoji(c.emoji) === !c.isPureText || console.error([c, containsEmoji(c.emoji), !c.isPureText])
   ).reduce((a, v) => a && v, true), 'containsEmoji()');
