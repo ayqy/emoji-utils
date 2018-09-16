@@ -1,0 +1,49 @@
+{
+  "name": "emoji-utils",
+  "version": "0.0.1",
+  "description": "the most ROBUST emoji utils in JavaScript",
+  "main": "dist/umd/emoji-utils.js",
+  "scripts": {
+    "test": "node test.js",
+    "rollup": "./node_modules/.bin/rollup -c",
+    "build": "NODE_ENV='development' npm run rollup",
+    "build:umd": "NODE_ENV='development' BUILD_FORMAT='umd' npm run rollup",
+    "release": "NODE_ENV='production' npm run rollup",
+    "release:umd": "NODE_ENV='production' BUILD_FORMAT='umd' npm run rollup",
+    "release:min": "NODE_ENV='production' BUILD_FORMAT='umd' MINIFY=1 npm run rollup"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ayqy/emoji-utils.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.0.1",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-proposal-decorators": "^7.0.0",
+    "@babel/plugin-proposal-do-expressions": "^7.0.0",
+    "@babel/plugin-proposal-export-default-from": "^7.0.0",
+    "@babel/plugin-proposal-export-namespace-from": "^7.0.0",
+    "@babel/plugin-proposal-function-bind": "^7.0.0",
+    "@babel/plugin-proposal-function-sent": "^7.0.0",
+    "@babel/plugin-proposal-json-strings": "^7.0.0",
+    "@babel/plugin-proposal-logical-assignment-operators": "^7.0.0",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.0.0",
+    "@babel/plugin-proposal-numeric-separator": "^7.0.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.0.0",
+    "@babel/plugin-proposal-pipeline-operator": "^7.0.0",
+    "@babel/plugin-proposal-throw-expressions": "^7.0.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/plugin-syntax-import-meta": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "babel-eslint": "^9.0.0",
+    "eslint": "^5.6.0",
+    "rollup": "^0.65.2",
+    "rollup-plugin-babel": "^4.0.1",
+    "rollup-plugin-eslint": "^5.0.0",
+    "rollup-plugin-uglify": "^5.0.2",
+    "uglify-es": "^3.3.9"
+  }
+}
