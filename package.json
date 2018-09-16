@@ -1,8 +1,8 @@
 {
-  "name": "emoji-utils",
+  "name": "emoutils",
   "version": "0.0.1",
-  "description": "the most ROBUST emoji utils in JavaScript",
-  "main": "dist/umd/emoji-utils.js",
+  "description": "A tiny emoji utils in JavaScript",
+  "main": "dist/umd/emoutils.js",
   "scripts": {
     "test": "node test.js",
     "rollup": "./node_modules/.bin/rollup -c",

@@ -47,17 +47,17 @@ if (BUILD_FORMAT === 'umd') {
 }
 let format = BUILD_FORMAT || 'es';
 let opts = {
-  input: 'emoji-utils.js',
+  input: 'emoutils.js',
   output: {
     name: 'emojiUtils',
-    file: ENV === '"production"' ? `dist/${format}/emoji-utils.js` : `dist/${format}/emoji-utils.dev.js`,
+    file: ENV === '"production"' ? `dist/${format}/emoutils.js` : `dist/${format}/emoutils.dev.js`,
     format,
     sourcemap: 'true'
   },
   plugins: [
     eslint({
       parser: 'babel-eslint',
-      include: ['emoji-utils.js', 'test.js'],
+      include: ['emoutils.js', 'test.js'],
       exclude: [
         'node_modules/**'
       ]

@@ -1,2 +1,2 @@
 # emoji-utils
-the most ROBUST emoji utils in JavaScript
+A tiny emoji utils in JavaScript
