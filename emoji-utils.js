@@ -29,17 +29,17 @@ const EMOJI_MODIFIERS = [
 /**
  * 尝试匹配由零宽空格连接起来的emoji
  * @param {String} str
- * @param {String} matched
  */
-function _matchJoined(str, matched = '') {
+function _matchJoined(str) {
+  let matched = '';
   // joiner
   let reJoiner = new RegExp('^' + EMOJI_JOINER.source);
   let matchedJoiner = str.match(reJoiner);
   if (matchedJoiner) {
     // 吃掉连接符
     matched += matchedJoiner[0];
-    str = str.substr(str2unicodeArray(matchedJoiner[0]).length);
-    return matchOneEmoji(str, matched);
+    str = str.substr(matchedJoiner[0].length);
+    matched += matchOneEmoji(str);
   }
 
   return matched;
@@ -48,17 +48,17 @@ function _matchJoined(str, matched = '') {
 /**
  * 向后看一位，如'\u0023\ufe0f\u20e3'
  * @param {String} str
- * @param {String} matched 匹配到的emoji
  */
-function _matchForwarding(str, matched = '') {
+function _matchForwarding(str) {
+  let matched = '';
   let reForwarding = new RegExp('^.' +
       '(?:' + EMOJI_INDICATORS.map(re => '(?:' + re.source + ')').join('|') + ')+'
   );
   let matchedForwarding = str.match(reForwarding);
   if (matchedForwarding) {
     matched += matchedForwarding[0];
-    str = str.substr(str2unicodeArray(matchedForwarding[0]).length);
-    return _matchJoined(str, matched);
+    str = str.substr(matchedForwarding[0].length);
+    matched += _matchJoined(str, matched);
   }
 
   return matched;
@@ -67,9 +67,9 @@ function _matchForwarding(str, matched = '') {
 /**
  * 尝试匹配开头的emoji，失败返回''
  * @param {String} str
- * @param {String} matched 匹配到的emoji
  */
-function matchOneEmoji(str, matched = '') {
+function matchOneEmoji(str) {
+  let matched = '';
   let isMatched = false;
   for (let i = 0; i < EMOJIS.length; i++) {
     let emojiTester = new RegExp('^' + EMOJIS[i].source);
@@ -82,14 +82,14 @@ function matchOneEmoji(str, matched = '') {
       );
       let matchedEmoji = str.match(reEmoji);
       matched += matchedEmoji[0];
-      str = str.substr(str2unicodeArray(matchedEmoji[0]).length);
-      return _matchJoined(str, matched);
+      str = str.substr(matchedEmoji[0].length);
+      matched += _matchJoined(str);
     }
   }
 
   // 向后看1位，应对类似'#️⃣'的场景
   if (!isMatched && str !== '') {
-    return _matchForwarding(str, matched);
+    matched += _matchForwarding(str);
   }
 
   return matched;
@@ -117,7 +117,7 @@ function padStart(str, targetLength, padString) {
     }
     return padString.slice(0,targetLength) + str;
   }
-};
+}
 
 /**
  * 是不是一个emoji
@@ -143,11 +143,11 @@ export function containsEmoji(str = '') {
   while (rest.length > 0) {
     let matchedEmoji = matchOneEmoji(rest);
     if (matchedEmoji) return true;
-    let consumed = str2unicodeArray(matchedEmoji).length || 1;
+    let consumed = matchedEmoji.length || 1;
     rest = rest.substr(consumed);
   }
 
-  return false;;
+  return false;
 }
 
 /**
@@ -169,8 +169,8 @@ export function length(str = '') {
   let rest = str;
 
   while (rest.length > 0) {
-    let emoji = matchOneEmoji(rest);
-    let consumed = str2unicodeArray(emoji).length || 1;
+    let matchedEmoji = matchOneEmoji(rest);
+    let consumed = matchedEmoji.length || 1;
     rest = rest.substr(consumed);
     len++;
   }
@@ -198,15 +198,15 @@ export function substr(str = '', start = 0, len = Infinity) {
   let index = 0;
   let substring = '';
   while (str.length > 0 && len > 0) {
-    let matched = matchOneEmoji(str);
-    if (!matched) {
-      matched = str[0];
+    let matchedEmoji = matchOneEmoji(str);
+    if (!matchedEmoji) {
+      matchedEmoji = str[0];
     }
     if (index >= start) {
-      substring += matched;
+      substring += matchedEmoji;
       len--;
     }
-    str = str.substr(str2unicodeArray(matched).length);
+    str = str.substr(matchedEmoji.length);
     index++;
   }
 
@@ -225,7 +225,7 @@ export function toArray(str = '') {
       matched = str[0];
     }
     arr.push(matched);
-    str = str.substr(str2unicodeArray(matched).length);
+    str = str.substr(matched.length);
   }
 
   return arr;
