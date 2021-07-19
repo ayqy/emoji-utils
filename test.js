@@ -6,7 +6,7 @@ const {
   length,
   substr,
   toArray
-} = require('./dist/umd/emoji-utils');
+} = require('./dist/umd/emoutils');
 
 
 // export to global
