@@ -7,23 +7,27 @@ const EMOJIS = [
   // pairs of regional indicators (which display emoji country flags)
   /\ud83c[\udde6-\uddff]\ud83c[\udde6-\uddff]/,
   // the unofficial emoji flags for England, Scotland and Wales
-	// each of these begins with the black flag emoji and ends with the cancel tag
-  /\ud83c\udff4.+\udb40\udc7f/,
+  // each of these begins with the black flag emoji and ends with the cancel tag
+  /\ud83c\udff4(?:\udb40[\udc20-\udc7e])+?\udb40\udc7f/,
   // range of surrogate pairs
   /[\ud800-\udbff][\udc00-\udfff]/
 ];
 // zero width joiner
 const EMOJI_JOINER = /\u200d/;
+const EMOJI_JOIN_SQUARE = /\u2b1b|\u2b1c/;
 // 后缀控制符
 const EMOJI_INDICATORS = [
+  // VARIATION SELECTOR-15 (VS15), used to request a text presentation for an emoji character.
+  /\ufe0e/,
   // variation selection-16, which specifies that the preceding character should be displayed as an emoji
   /\ufe0f/,
   // combining enclosing keycap, which is used after keycap characters
   /\u20e3/
 ];
+const SKIN_TONE_MODIFIERS = /\ud83c[\udffb-\udfff]/;
 const EMOJI_MODIFIERS = [
   // skin tone modifiers
-  /\ud83c[\udffb-\udfff]/
+  SKIN_TONE_MODIFIERS
 ].concat(EMOJI_INDICATORS);
 
 /**
@@ -39,7 +43,15 @@ function _matchJoined(str) {
     // 吃掉连接符
     matched += matchedJoiner[0];
     str = str.substr(matchedJoiner[0].length);
-    matched += matchOneEmoji(str);
+    // join Colored squares \u2b1b \u2b1c
+    const squareJoinMatched = str[0].match(EMOJI_JOIN_SQUARE);
+    if (squareJoinMatched) {
+      matched += squareJoinMatched[0];
+      str = str.substr(squareJoinMatched[0].length);
+      matched += _matchJoined(str);
+    } else {
+      matched += matchOneEmoji(str);
+    }
   }
 
   return matched;
@@ -51,8 +63,10 @@ function _matchJoined(str) {
  */
 function _matchForwarding(str) {
   let matched = '';
-  let reForwarding = new RegExp('^.' +
-      '(?:' + EMOJI_INDICATORS.map(re => '(?:' + re.source + ')').join('|') + ')+'
+  let reForwarding = new RegExp('^.'
+    + '(?:'
+    + '(?:' + EMOJI_INDICATORS.map(re => '(?:' + re.source + ')').join('|') + ')+'
+    + `|${SKIN_TONE_MODIFIERS.source})`
   );
   let matchedForwarding = str.match(reForwarding);
   if (matchedForwarding) {
@@ -84,6 +98,7 @@ function matchOneEmoji(str) {
       matched += matchedEmoji[0];
       str = str.substr(matchedEmoji[0].length);
       matched += _matchJoined(str);
+      break;
     }
   }
 
@@ -237,5 +252,6 @@ export default {
   str2unicodeArray,
   length,
   substr,
+  matchOneEmoji,
   toArray
 }
