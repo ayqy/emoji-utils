@@ -6,7 +6,7 @@ const {
   length,
   substr,
   toArray
-} = require('./dist/umd/emoji-utils');
+} = require('./dist/umd/emoutils');
 
 
 // export to global
@@ -127,11 +127,11 @@ let cases = [
   {
     emoji: '\u0023\ud83c\udfff',
     unicode: '\u0023\ud83c\udfff',
-    array: ['\u0023', '\ud83c\udfff'],
-    length: 2,
+    array: ['\u0023\ud83c\udfff'],
+    length: 1,
     sub: [{
       params: [0, 1],
-      str: '\u0023'
+      str: '\u0023\ud83c\udfff'
     }, {
       params: [0, 2],
       str: '\u0023\ud83c\udfff'

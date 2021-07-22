@@ -18,6 +18,7 @@ const EMOJIS = [
 ].concat(BASIC_EMOJIS);
 // zero width joiner
 const EMOJI_JOINER = /\u200d/;
+const EMOJI_JOIN_SQUARE = /\u2b1b|\u2b1c/;
 // 后缀控制符
 const EMOJI_INDICATORS = [
   // VARIATION SELECTOR-15 (VS15), used to request a text presentation for an emoji character.
@@ -46,7 +47,15 @@ function _matchJoined(str) {
     // 吃掉连接符
     matched += matchedJoiner[0];
     str = str.substr(matchedJoiner[0].length);
-    matched += matchOneEmoji(str);
+    // join Colored squares \u2b1b \u2b1c
+    const squareJoinMatched = str[0].match(EMOJI_JOIN_SQUARE);
+    if (squareJoinMatched) {
+      matched += squareJoinMatched[0];
+      str = str.substr(squareJoinMatched[0].length);
+      matched += _matchJoined(str);
+    } else {
+      matched += matchOneEmoji(str);
+    }
   }
 
   return matched;
@@ -77,7 +86,7 @@ function _matchForwarding(str) {
  * 尝试匹配开头的emoji，失败返回''
  * @param {String} str
  */
-function matchOneEmoji(str) {
+export function matchOneEmoji(str = '') {
   let matched = '';
   let isMatched = false;
   for (let i = 0; i < EMOJIS.length; i++) {
