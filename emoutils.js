@@ -14,7 +14,7 @@ const EMOJIS = [
   /\ud83c[\udde6-\uddff]\ud83c[\udde6-\uddff]/,
   // the unofficial emoji flags for England, Scotland and Wales
   // each of these begins with the black flag emoji and ends with the cancel tag
-  /\ud83c\udff4(?:\udb40[\udc20-\udc7e])+?\udb40\udc7f/
+  /\ud83c\udff4(?:\udb40[\udc20-\udc7e])+?\udb40\udc7f/,
 ].concat(BASIC_EMOJIS);
 // zero width joiner
 const EMOJI_JOINER = /\u200d/;
