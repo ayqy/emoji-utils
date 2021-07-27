@@ -72,7 +72,7 @@ function _matchJoined(str) {
  * @param {String} str
  * @param {Boolean} fromStrStart 可以指定是否从字符串开头开始匹配
  */
-function matchOneEmoji(str, fromStrStart = true) {
+export function matchOneEmoji(str, fromStrStart = true) {
   let matched = '';
   const emojiTester = fromStrStart ? EMOJI_TESTER_FROM_START : EMOJI_TESTER;
   if (emojiTester.test(str)) {
