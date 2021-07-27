@@ -127,11 +127,11 @@ let cases = [
   {
     emoji: '\u0023\ud83c\udfff',
     unicode: '\u0023\ud83c\udfff',
-    array: ['\u0023\ud83c\udfff'],
-    length: 1,
+    array: ['\u0023', '\ud83c\udfff'],
+    length: 2,
     sub: [{
       params: [0, 1],
-      str: '\u0023\ud83c\udfff'
+      str: '\u0023'
     }, {
       params: [0, 2],
       str: '\u0023\ud83c\udfff'
@@ -217,7 +217,7 @@ let cases = [
       str: 'i🌺💰'
     }, {
       params: [-2, 1],
-      str: '。🌚'
+      str: '。'
     }]
   },
   {
