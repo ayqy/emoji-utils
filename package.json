@@ -1,6 +1,6 @@
 {
   "name": "emoutils",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A tiny emoji utils in JavaScript",
   "main": "dist/umd/emoutils.js",
   "scripts": {

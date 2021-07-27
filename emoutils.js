@@ -82,7 +82,7 @@ function _matchForwarding(str) {
  * 尝试匹配开头的emoji，失败返回''
  * @param {String} str
  */
-function matchOneEmoji(str) {
+export function matchOneEmoji(str = '') {
   let matched = '';
   let isMatched = false;
   for (let i = 0; i < EMOJIS.length; i++) {
