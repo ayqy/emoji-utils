@@ -6,9 +6,15 @@ A tiny emoji util in JavaScript to solve all these things:
 
 ##  Installation
 
-Node:
+Node.js:
 
     npm -i --save-dev emoutils
+
+    const emoutils = require('emoutils');
+    // or
+    // const { isEmoji } = require('emoutils');
+    const assert = require('assert');
+    assert.strictEqual(emoutils.isEmoji('😄'), true);
 
 Browser:
 
@@ -20,6 +26,12 @@ Browser:
     <!-- unminified ES version -->
     <script src="https://unpkg.com/emoutils/dist/es/emoutils.js"></script>
 
+    <script>
+        console.log(
+            emojiUtils.containsEmoji('hello 👋') === true
+        );
+    </script>
+
 ## API
 
 - `isEmoji(str = '')`: Whether `str` is emoji or not
@@ -27,10 +39,17 @@ Browser:
 - `str2unicodeArray(str = '')`: Convert `str` to an array
 - `length(str = '')`: Return the length of `str`
 - `substr(str = '', start = 0, len = Infinity)`: Return a sub-string of `str`
-- `matchOneEmoji(str = '')`: Match one leading emoji, return `''` if failed
+- `matchOneEmoji(str = '', fromStrStart = true)`: Match one leading emoji by default, return `''` if failed
 - `toArray(str = '')`: Convert `str` to single char/emoji array (like `str.split('')` with emoji supports)
 
 ## Changelog
+
+### 2.0.0
+
+- (**BREAKING**) Basic emojis before 0xFFFF supports ([PR#5](https://github.com/ayqy/emoji-utils/pull/5) for details, and [#79efbd7](https://github.com/ayqy/emoji-utils/commit/79efbd7febace47bebccc41430350809957fff53) for breaking case)
+- `matchOneEmoji()`: A new parameter `fromStrStart` supports
+- `substr()`: A negative value for the `start` parameter bug fixes
+- Performance optimization
 
 ### 1.0.0
 
