@@ -1,4 +1,5 @@
 const assert = require('assert');
+const https = require('https');
 const {
   isEmoji,
   containsEmoji,
@@ -7,6 +8,29 @@ const {
   substr,
   toArray
 } = require('./dist/umd/emoutils');
+const EMOJI_TEST_URL = 'https://unicode.org/Public/emoji/13.1/emoji-test.txt';
+
+function fetch(url) {
+  return new Promise((resolve, reject) => {
+    https
+      .get(EMOJI_TEST_URL, (res) => {
+        const bufs = [];
+        let size = 0;
+        res.on('data', (data) => {
+          bufs.push(data);
+          size += data.length;
+        });
+        res.on('end', () => {
+          const buf = Buffer.concat(bufs, size);
+          const body = buf.toString();
+          resolve(body);
+        });
+      })
+      .on("error", (err) => {
+        reject(err);
+      });
+  })
+}
 
 
 // export to global
@@ -297,3 +321,23 @@ assert(cases.filter(c => c.length === 1).map(c =>
 assert(cases.map(c =>
     containsEmoji(c.emoji) === !c.isPureText || console.error([c, containsEmoji(c.emoji), !c.isPureText])
   ).reduce((a, v) => a && v, true), 'containsEmoji()');
+
+fetch(EMOJI_TEST_URL).then(body => {
+  const emojiList = [];
+  let emojiListStr = '';
+  body.replace(/; .+?qualified\s+# (.+?) E/gu, ($0, $1) => {
+    emojiList.push($1);
+    emojiListStr += `${$1}`;
+  });
+  // console.log(emojiList);
+
+  const emoji2Array = emojiUtil.toArray(emojiListStr);
+  // console.log(emoji2Array);
+
+  assert.strictEqual(emojiList.length, emoji2Array.length, 'toArray() length');
+  emojiList.forEach((v, i) => {
+    assert.strictEqual(v, emoji2Array[i], `toArray() values ${[v, emoji2Array[i]]}`);
+  });
+}).catch(error => {
+  throw error;
+});
