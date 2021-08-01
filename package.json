@@ -1,6 +1,6 @@
 {
   "name": "emoutils",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A tiny emoji utils in JavaScript",
   "main": "dist/umd/emoutils.js",
   "scripts": {
@@ -10,7 +10,8 @@
     "build:umd": "NODE_ENV='development' BUILD_FORMAT='umd' npm run rollup",
     "release": "NODE_ENV='production' npm run rollup",
     "release:umd": "NODE_ENV='production' BUILD_FORMAT='umd' npm run rollup",
-    "release:min": "NODE_ENV='production' BUILD_FORMAT='umd' MINIFY=1 npm run rollup"
+    "release:min": "NODE_ENV='production' BUILD_FORMAT='umd' MINIFY=1 npm run rollup",
+    "prepublish": "rm -rf dist && npm run release && npm run release:umd && npm run release:min"
   },
   "repository": {
     "type": "git",
